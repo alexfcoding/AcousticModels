@@ -1,0 +1,80 @@
+clear all% Очистка памяти
+clc
+h = 0.001;
+p0 = 7800;
+E = 200*10^9;
+d = 0.06;
+J = pi*d^3*h/8;
+L = 2.37; % длина трубопровода
+A1 = 0.0001; % демпфирует  ВЧ
+A2 = 40; % демпфирует все частоты
+A3 = 0;
+A = 0.04; % сечение трубопровода
+M = pi * (d-h) * p0 * h * 2;
+ZZ = 0;
+N = 1; % число импульсов
+x1 = L - 0.28;
+x2 = L/1;
+
+for I = 1:N % Select N > 1 if impulse sequence needed
+    %x1 = x1 - 0.01;
+    VV = 1; % Generator speed
+    Y = 0; % Model signal function
+    YY = 0; % Empty array 
+    t = 0; % Discretized time intervals
+    i = 7:2:507; % Harmonics number
+    Fd = 44100; % Sampling frequency, Hz
+    Time = 2; % Signal duration, s
+    Tb = 0.00004; % Contact time
+    t = 0; % Time interval variable
+    
+    Cn = pi/2 * (i + 1); % Object fixing equation
+    delta = sqrt(1./2.*(A1.*Cn.^4.*pi.^4./(L.^4)+A2)); % Frequency shift
+    W = A3 + sqrt(E.*J / M / (L.^4) .* Cn.^4); % 
+    Oi = sqrt(W.^2 - delta.^2);
+
+% цикл построения сигнала-------------------------------------------------------------------------
+for HHH = 1:1:(Time*Fd-1) 
+    Y =sum( (-1).^((i-1)./2).*exp(-delta.*t).*sin(i.*pi.*x1./L)./ ...
+    ( (W.^2-pi.^2./(Tb.^2)).^2 + 4.*pi.^2.*delta.^2./(Tb.^2))...
+    .*((2.*exp(delta.*Tb).*delta.*pi./Tb.*cos(Oi.*Tb) - pi.*exp(delta.*Tb)./Tb./Oi.*...
+    (2.*delta.^2-W.^2+pi.^2./Tb./Tb).*sin(Oi.*Tb)+2.*pi.*delta./Tb).*cos(Oi.*t) + ...
+    (pi.*exp(delta.*Tb)./Tb./Oi.*(2.*delta.^2-W.^2+pi.^2./Tb./Tb).*cos(Oi.*Tb) + ...
+    2.*exp(delta.*Tb).*delta.*pi./Tb.*sin(Oi.*Tb)+pi./Tb./Oi.*(2.*delta.^2-W.^2+pi.^2./Tb./Tb)).* ...
+    sin(Oi.*t)));
+    t = t + 1/Fd; % отсчеты времени
+    YY = [YY Y]; % конкатенация
+    %pi./(M.*L.*Tb).*
+end
+% ------------------------------------------------------------------------------------------------
+
+length_YY = length(YY);
+t = 0:1/Fd:Time-1/Fd; % отсчеты времени для построения графика
+length_t = length(t);
+YYYY = YY./max(YY).* 0.7; % нормализация амплитуды
+ZZ = [ZZ YYYY];
+plot (t,YY); % сигнал от времени
+GGG = 0:1/Fd:Time - 1/Fd;
+
+Y=0;
+t=0;
+I
+end
+
+t = 0:1/Fd:Time.*N-1/Fd;; % отсчеты времени для построения графика
+%plot (t,YY); % сигнал от времени
+audiowrite('CalculatedSignal.wav',ZZ,Fd);
+
+% ------------------------------------------------------------------------------------------------
+
+FFTSize = length(YY); %length(YY); - размер окна БПФ
+F=0:Fd/FFTSize:Fd/2-1/FFTSize; % Массив частот вычисляемого спектра Фурье
+FftS = fft((ZZ),FFTSize); % Амплитуды преобразования Фурье сигнала
+
+%figure
+%plot(F, 10*log(abs(FftS(1:length(F / 2)))));
+
+%figure
+%plot(t,ifft(FftS,length(t)));% ОБПФ
+
+f
