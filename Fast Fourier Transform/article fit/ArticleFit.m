@@ -57,30 +57,10 @@ end
 
 T = 0:1/Fd:Time-1/Fd;
 %plot (T,YY); % Drawing signal
-
 audiowrite('CalculatedSignal.wav',ZZ,Fd); %Saving signal to file
 
-% figure
-% plot (T,newBuffer); % Drawing signal
-% 
-% FFTSize = length(YY); % FFT window size
-% F=0:Fd/FFTSize:Fd/2-1/FFTSize; % Frequencies
-% FftS = fft((ZZ),FFTSize); % FFT amplitudes
-% 
-% figure
-% plot(F, 10*log(abs(FftS(1:length(F / 2))))); %Spectrum drawing
-% title('Normal signal spectrum')
-% 
-% %///////////
-% FftS2 = fft((ZZ),FFTSize); % FFT amplitudes
-% 
-% figure
-% plot(F, 10*log(abs(FftS2(1:length(F / 2))))); %Spectrum 2 drawing
-% title('Shifted signal spectrum')
-% %///////////
-
 %ObjectOnTop loading===============================================================
-%figure
+
 audioin = 0;
 [audioin,FFS] = audioread('G:\ObjectOnTop10.wav');
 AUDIO_IN = audioin;
@@ -91,79 +71,38 @@ FFTSize = length(audioin); % FFT window size
 F=0:FFS/FFTSize:FFS/2-1/FFTSize; % Frequencies
 FftS = fft((audioin),FFTSize); % FFT amplitudes
 
-%figure
-%plot(F, 10*log10(abs(FftS(1:length(F / 2))))); %Spectrum drawing
-%title('ObjectOnTop signal spectrum')
 %WithoutObjectOnTop loading===============================================================
-%figure
 
 [audioin,FFS] = audioread('G:\WithoutObjectOnTop10.wav');
 AUDIO_IN = audioin;
 aud = 1:1:length(audioin);
-%plot (aud./FFS,audioin)
 
 FFTSize = length(audioin); % FFT window size
 F=0:FFS/FFTSize:FFS/2-1/FFTSize; % Frequencies
 FftS2 = fft((audioin),FFTSize); % FFT amplitudes
 
-%figure
-%plot(F, 10*log10(abs(FftS2(1:length(F / 2))))); %Spectrum drawing
-%title('WithoutObjectOnTop signal spectrum')
-
-%FftS2(1:5000) = FftS2(1:5000);
-
-% figure
-% plot(F, 10*log(abs(FftS2(1:length(F / 2))))); %Spectrum drawing
-% title('WithoutObjectOnTop filter')
-
 %DIFF===============================================================
+
 FF=0:FFS/FFTSize:FFS-1/FFTSize; % Frequencies
 DIFF = FftS - FftS2;
 c1 = smooth(FF,(FftS),0.00001,'loess');
 c2 = smooth(FF,(FftS2),0.00001,'loess');
-%c1 = abs(FftS);
-%c2 = abs(FftS2);
 c3 = c1-c2;
-
-figure
-
-plot(FF,c1);
-
-hold on
-
-plot(FF,c2);
-
-plot(FF,c3);
-title('Smooth c3');
-
-%DIFF = DIFF .* 10;
-%c1 = 10*log10(abs(FftS(1:length(F / 2))));
-%c2 = 10*log10(abs(FftS2(1:length(F / 2))));
-%figure
-%plot(F,DIFF(1:length(F / 2)));
 
 audioin = 0;
 [audioin,FFS] = audioread('G:\CalculatedSignal.wav');
 AUDIO_IN = audioin;
 aud = 1:1:length(audioin);
 FftS3 = fft((audioin),FFTSize); % FFT amplitudes
-M = importdata('G:\diffMatlab.txt')
-M=M*1;
-Mr = 10.^(M./10);
-k=1;
-buf = 0;
-
-%FftS3(1:16384) = FftS3(1:16384).*Mr(1:16384);
-%FftS3 = FftS3 .* DIFF ;
-%FftS3 = DIFF ;
-%FftS3(16385:32768) = FftS3(16385:32768) .* M ;
-
-plot(FF,abs(FftS3));
 
 FftS3 = FftS3 + c3 ;
 
+figure
+plot(FF,abs(c1));
+hold on
+plot(FF,abs(c2));
+plot(FF,abs(c3));
 plot(FF,abs(FftS3));
-
 hold off
 
 legend('c1','c2','c3','FftS3_stock', 'FftS3');
