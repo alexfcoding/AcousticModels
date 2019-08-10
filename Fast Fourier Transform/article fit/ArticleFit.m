@@ -107,20 +107,12 @@ hold off
 
 legend('c1','c2','c3','FftS3_stock', 'FftS3');
 title('Final spec')
-%reverseM = flip(Mr);
-%FftS3(16385:32768) = FftS3(16385:32768).*reverseM(1:16384);
 
-%yy1 = smooth(F,curve(1:length(F / 2)),0.05,'loess');
-%smoothM = smooth(M,curve(1:length(F / 2)),0.05,'loess');
-%figure
-%plot(F,M);
-%title('M')
-%figure
 ifftSignal = ifft(FftS3,32768);
 %plot(T,ifftSignal);% наот
 audiowrite('CalculatedDiffSignal.wav',ifftSignal,FFS); %Saving signal to file
-%End DIFF===============================================================
 
+%End DIFF===============================================================
 
 % figure
 % plot(T,ifft(FftS,length(T)));% наот

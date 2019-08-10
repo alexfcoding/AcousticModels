@@ -1,5 +1,5 @@
 % Read an audio waveform
-[d,sr] = audioread('CalculatedSignal.wav');
+[d,sr] = audioread('For article\ModelNormalGained.wav');
 % Plot the spectrogram
 %specgram(d(:,1),512,sr);
 % Read with resampling, casting to mono, and time limits
@@ -10,7 +10,7 @@ view(101,60)
 colorbar
 
 %SPECTROGRAM2
-[d,sr] = audioread('WithoutObjectOnTop10.wav');
+[d,sr] = audioread('For article\RealWithObjectGained.wav');
 figure
 spectrogram(d,kaiser(256,15),203,1024,sr,'yaxis')
 colormap jet
@@ -19,7 +19,7 @@ view(101,60)
 colorbar
 
 %SPECTROGRAM3
-[d,sr] = audioread('CalculatedDiffSignal.wav');
+[d,sr] = audioread('For article\ModeledWithObjectGained.wav');
 figure
 spectrogram(d,kaiser(256,15),203,1024,sr,'yaxis')
 colormap jet

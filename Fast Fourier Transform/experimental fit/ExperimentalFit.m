@@ -7,7 +7,7 @@ d = 0.06;
 J = pi*d^3*h/8;
 L = 2.37; %  Object length
 A1 = 0.00005; % High frequency damping coefficient
-A2 = 70; % Low frequency damping coefficient
+A2 = 300; % Low frequency damping coefficient
 A3 = 0; % Rise frequency value
 M = pi * (d-h) * p0 * h * 2;
 ZZ = 0;
@@ -93,6 +93,7 @@ FftS = fft((audioin),FFTSize); % FFT amplitudes
 
 %figure
 %plot(F, 10*log10(abs(FftS(1:length(F / 2))))); %Spectrum drawing
+%plot(F, (abs(FftS(1:length(F / 2))./FFTSize))); %Spectrum drawing
 %title('ObjectOnTop signal spectrum')
 %WithoutObjectOnTop loading===============================================================
 %figure
@@ -119,8 +120,8 @@ FftS2 = fft((audioin),FFTSize); % FFT amplitudes
 %DIFF===============================================================
 FF=0:FFS/FFTSize:FFS-1/FFTSize; % Frequencies
 DIFF = FftS - FftS2;
-c1 = smooth(FF,(FftS),0.00001,'loess');
-c2 = smooth(FF,(FftS2),0.00001,'loess');
+c1 = smooth(FF,(FftS),0.00001,'loess'); % smooth(FF,abs(FftS),0.00001,'loess') - WRONG!
+c2 = smooth(FF,(FftS2),0.00001,'loess'); % smooth(FF,abs(FftS2),0.00001,'loess') - WRONG!
 %c1 = abs(FftS);
 %c2 = abs(FftS2);
 c3 = c1-c2;
@@ -147,16 +148,16 @@ audioin = 0;
 AUDIO_IN = audioin;
 aud = 1:1:length(audioin);
 FftS3 = fft((audioin),FFTSize); % FFT amplitudes
-M = importdata('G:\diffMatlab.txt')
-M=M*1;
+M = importdata('G:\MovingAverage_0.txt')
+M=M;
 Mr = 10.^(M./10);
+smoothMr = smooth(Mr,0.01,'loess');
 k=1;
 buf = 0;
 
 %FftS3(1:16384) = FftS3(1:16384).*Mr(1:16384);
-%FftS3 = FftS3 .* DIFF ;
-%FftS3 = DIFF ;
-%FftS3(16385:32768) = FftS3(16385:32768) .* M ;
+%reverseM = flip(Mr);
+%FftS3(16385:32768) = FftS3(16385:32768) .* reverseM(1:16384) ;
 
 plot(FF,abs(FftS3));
 
@@ -168,7 +169,7 @@ hold off
 
 legend('c1','c2','c3','FftS3_stock', 'FftS3');
 title('Final spec')
-%reverseM = flip(Mr);
+%reverseM = flip(M);
 %FftS3(16385:32768) = FftS3(16385:32768).*reverseM(1:16384);
 
 %yy1 = smooth(F,curve(1:length(F / 2)),0.05,'loess');
@@ -179,7 +180,7 @@ title('Final spec')
 %figure
 ifftSignal = ifft(FftS3,32768);
 %plot(T,ifftSignal);% наот
-audiowrite('CalculatedDiffSignal.wav',ifftSignal,FFS); %Saving signal to file
+audiowrite('CalculatedDiffSignalFunc.wav',ifftSignal,FFS); %Saving signal to file
 %End DIFF===============================================================
 
 
