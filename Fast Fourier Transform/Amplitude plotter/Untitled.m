@@ -1,3 +1,5 @@
+clear
+
 lengthSig = 500;
 
 figure
@@ -48,27 +50,23 @@ spectogramAnglex = 81;
 spectogramAngley = 31;
 figure
 
-for k = 1:3:7
-    subplot(3,3,k);
-    spectrogram(audioin1(1:size),kaiser(kaiserLength,15),kaiserOverlap,1:1:5000,FFS,'yaxis')
-    colormap hsv
-    view(spectogramAnglex,spectogramAngley);
-end
+array(1:length(audioin1),1) = audioin1;
+array(1:length(audioin1),2) = audioin2;
+array(1:length(audioin1),3) = audioin3;
 
-size = size + shift;
-for k = 2:3:8
-    subplot(3,3,k);
-    spectrogram(audioin1(size:size+shift),kaiser(kaiserLength,15),kaiserOverlap,1:1:5000,FFS,'yaxis')
-    colormap hsv
-    view(spectogramAnglex,spectogramAngley);
-end
+i = 1;
+start = 1;
 
+for start = 1:3
+    for k = start:3:start+6
+        subplot(3,3,k);
+        spectrogram(array((1:size),i),kaiser(kaiserLength,15),kaiserOverlap,1:1:5000,FFS,'yaxis')
+        colormap hsv
+        view(spectogramAnglex,spectogramAngley);
+        i = i + 1;
+    end
 size = size + shift;
-for k = 3:3:9
-    subplot(3,3,k);
-    spectrogram(audioin1(size:size+shift),kaiser(kaiserLength,15),kaiserOverlap,1:1:5000,FFS,'yaxis')
-    colormap hsv
-    view(spectogramAnglex,spectogramAngley);
+i=1;
 end
 
 

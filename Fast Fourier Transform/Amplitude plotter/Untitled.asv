@@ -3,19 +3,19 @@ lengthSig = 500;
 figure
 subplot(3,1,1);
 audioin1 = 0;
-[audioin1,FFS] = audioread('CutTo3000Hz\ModelNormalGainedUpTo3000.wav');
+[audioin1,FFS] = audioread('CutTo5000\ModelNormalGained.wav');
 aud = 1:1:length(audioin1);
 plot(aud(1:lengthSig), audioin1(1:lengthSig));
 
 subplot(3,1,2);
 audioin2 = 0;
-[audioin2,FFS] = audioread('CutTo3000Hz\RealWithObjectGainedCut2800UpTo3000.wav');
+[audioin2,FFS] = audioread('CutTo5000\RealWithObjectGainedCut2800.wav');
 aud = 1:1:length(audioin2);
 plot(aud(1:lengthSig), audioin2(1:lengthSig));
 
 subplot(3,1,3);
 audioin3 = 0;
-[audioin3,FFS] = audioread('CutTo3000Hz\ModeledWithObjectGainedUpTo3000.wav');
+[audioin3,FFS] = audioread('CutTo5000\ModeledWithObjectGained.wav');
 aud = 1:1:length(audioin3);
 plot(aud(1:lengthSig), audioin3(1:lengthSig));
 
@@ -25,55 +25,66 @@ Rxy1=0;
 Rxy2=0;
 Left = 1;
 Right = 50;
-% for lengthCorr = 1 : 50
-%     Rx1 = corr(audioin1(Left:Right), audioin2(Left:Right));
-%     Rx2 = corr(audioin1(Left:Right), audioin3(Left:Right));
-%     Rxy1 = [Rxy1 Rx1];
-%     Rxy2 = [Rxy2 Rx2];
-%     Left = Left + 50;
-%     Right = Right + 50;
-% end
 
-% figure
-% plot (Rxy1);
-% figure
-% plot (Rxy2);
-size = 128;
-shift = 128;
-kaiserLength = 64;
-kaiserOverlap = 50;
+for lengthCorr = 1 : 50
+    Rx1 = corr(audioin1(Left:Right), audioin2(Left:Right));
+    Rx2 = corr(audioin1(Left:Right), audioin3(Left:Right));
+    Rxy1 = [Rxy1 Rx1];
+    Rxy2 = [Rxy2 Rx2];
+    Left = Left + 50;
+    Right = Right + 50;
+end
+
 figure
-% spectrogram(audioin1(1:size),kaiser(kaiserLength,15),kaiserOverlap,1024,FFS,'yaxis')
-% colormap jet
-% 
-% 
-% figure
-% spectrogram(audioin2(1:size),kaiser(kaiserLength,15),kaiserOverlap,1024,FFS,'yaxis')
-% colormap jet
-% 
-% 
-% figure
-% spectrogram(audioin3(1:size),kaiser(kaiserLength,15),kaiserOverlap,1024,FFS,'yaxis')
-% colormap jet
+plot (Rxy1);
+figure
+plot (Rxy2);
+
+size = 512;
+shift = 512;
+kaiserLength = 200;
+kaiserOverlap = 191;
+spectogramAnglex = 81;
+spectogramAngley = 31;
+figure
+
+array(1:length(audioin1),1) = audioin1;
+array(1:length(audioin1),2) = audioin2;
+array(1:length(audioin1),3) = audioin3;
+
+i = 1;
+start = 1;
+for start = 1:3
+    for k = start:3:start+
+        subplot(3,3,k);
+        spectrogram(array((1:size),i),kaiser(kaiserLength,15),kaiserOverlap,1:1:5000,FFS,'yaxis')
+        colormap hsv
+        view(spectogramAnglex,spectogramAngley);
+        i = i + 1;
+    end
+size = size + shift;
+i=1;
+end
+
+% size = size + shift;
+% for k = 2:3:8
+%     subplot(3,3,k);
+%     spectrogram(array((1:size),i),kaiser(kaiserLength,15),kaiserOverlap,1:1:5000,FFS,'yaxis')
+%     colormap hsv
+%     view(spectogramAnglex,spectogramAngley);
+%     i = i + 1;
+% end
+% i=1;
 % 
 % size = size + shift;
-% 
-% figure
-% spectrogram(audioin1(size:size+shift),kaiser(kaiserLength,15),kaiserOverlap,1024,FFS,'yaxis')
-% colormap jet
-% 
-% figure
-% spectrogram(audioin2(size:size+shift),kaiser(kaiserLength,15),kaiserOverlap,1024,FFS,'yaxis')
-% colormap jet
-% 
-% figure
-% spectrogram(audioin3(size:size+shift),kaiser(kaiserLength,15),kaiserOverlap,1024,FFS,'yaxis')
-% colormap jet
+% for k = 3:3:9
+%     subplot(3,3,k);
+%     spectrogram(array((1:size),i),kaiser(kaiserLength,15),kaiserOverlap,1:1:5000,FFS,'yaxis')
+%     colormap hsv
+%     view(spectogramAnglex,spectogramAngley);
+%     i = i + 1;
+% end
+% i=1;
 
-figure
 
-FFTSize = length(audioin1(1:256)); % FFT window size
-F=0:FFS/FFTSize:FFS-1/FFTSize; % Frequencies
-FftS = fft((audioin1(1:256)),FFTSize); % FFT amplitudes
 
-plot(F, abs(FftS(1:));
