@@ -1,6 +1,6 @@
 # AcousticModels
 
-Скрипты Matlab, генерирующие wav-файлы, представляющие собой аналитические модели импульсов колебаний трубопровода, формируемых при точечном воздействием на его поверхность.
+Скрипты Matlab для генерации wav-файлов, содержащих аналитические модели импульсов колебаний трубопровода, формируемых точечным воздействием на его поверхность.
 
 ## Две модели
 
@@ -31,18 +31,19 @@
 - Построение 3d-спектрограммы сигнала
 - Наложение помехи на моделируемый сигнал
 
-![models](C:\Users\User\source\AcousticMathModels\img\models.png)
-
-* * *
-
 ## Базовая модель:
-![base_model](C:\Users\User\source\AcousticMathModels\img\base_model.png)
+![base_model](img/base_model.png)
 
 * * *
 
 ## Полная модель:
-![full_model](C:\Users\User\source\AcousticMathModels\img\full_model.png)
+![full_model](img/full_model.png)
+
+
+## Оценка адекватности:
+![models](img/models.png)
+
+* * *
 
 ## Когерентное накопление
-
-## ![accumulation](C:\Users\User\source\AcousticMathModels\img\accumulation.jpg)
+![accumulation](img/accumulation.jpg)
