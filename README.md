@@ -10,7 +10,6 @@
 + Vibration problems in engineering. Timoshenko S.P., Young, D.H., Weaver W., 1967
 
 ## Параметры моделей:
-
 - Координата воздействия и приема сигнала
 - Масса трубопровода
 - Протяженность трубопровода
@@ -24,19 +23,21 @@
 - Длительность сигнала
 
 ## Функционал скриптов:
-
 - Генерация моделируемых импульсов в wav-файлы 
 - Построение формы сигнала и амплитудно-частотного спектра
-- Построение 3d-спектрограммы сигнала
-
-![models](C:\Users\User\source\AcousticMathModels\img\models.png)
+- Построение 3d-спектрограмм
 
 * * *
 
 ## Базовая модель:
-![base_model](C:\Users\User\source\AcousticMathModels\img\base_model.png)
+![base_model](img/base_model.png)
+
 
 * * *
 
 ## Полная модель:
-![full_model](C:\Users\User\source\AcousticMathModels\img\full_model.png)
+![full_model](img/full_model.png)
+
+* * *
+
+![models](img/models.png)
